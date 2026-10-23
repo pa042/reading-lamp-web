@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --color-page: #ffffff;
+  --color-surface: #f6f7f4;
+  --color-surface-2: #eef0ea;
+  --color-ink: #1c2321;
+  --color-ink-soft: #6f7a75;
+  --color-accent: #1f6f63;
+  --color-accent-bright: #26897a;
+  --color-on-accent: #ffffff;
+  --color-status-done: #6a6630;
+  --color-status-done-tint: rgba(106, 102, 48, 0.14);
+  --color-status-want: #5a5f8c;
+  --color-status-want-tint: rgba(90, 95, 140, 0.14);
+  --color-accent-tint: rgba(31, 111, 99, 0.1);
+  --color-line: rgba(28, 35, 33, 0.14);
+  --color-danger: #a8503f;
+  --shadow-card: 0 8px 20px rgba(28, 35, 33, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-page: #201f1c;
+    --color-surface: #2a2924;
+    --color-surface-2: #343229;
+    --color-ink: #edeae1;
+    --color-ink-soft: #a6a194;
+    --color-accent: #3fa091;
+    --color-accent-bright: #55b6a6;
+    --color-on-accent: #102521;
+    --color-status-done: #b4ae70;
+    --color-status-done-tint: rgba(180, 174, 112, 0.16);
+    --color-status-want: #9aa0d0;
+    --color-status-want-tint: rgba(154, 160, 208, 0.18);
+    --color-accent-tint: rgba(63, 160, 145, 0.18);
+    --color-line: rgba(237, 234, 225, 0.14);
+    --color-danger: #d98e7b;
+    --shadow-card: 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+}
+
+@theme inline {
+  --color-page: var(--color-page);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-accent: var(--color-accent);
+  --color-accent-bright: var(--color-accent-bright);
+  --color-on-accent: var(--color-on-accent);
+  --color-status-done: var(--color-status-done);
+  --color-status-want: var(--color-status-want);
+  --color-line: var(--color-line);
+  --color-danger: var(--color-danger);
+  --font-head: "Zen Kaku Gothic New", sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic", sans-serif;
+  --font-data: "JetBrains Mono", monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.7;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-head);
+  font-weight: 900;
+  margin: 0;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  font-size: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: var(--color-ink);
+  width: 100%;
+  appearance: none;
+}
+
+button {
+  font: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
