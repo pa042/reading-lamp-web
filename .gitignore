@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local backup of data imported from the claude.ai artifact version (personal data, not source)
+/_backup_from_artifact/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

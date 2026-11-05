@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Book, BookStatus } from "@/lib/types";
 import { createBook, createRecord } from "@/app/actions";
 import { fmtDate } from "@/lib/utils";
+import BulletTextarea from "./BulletTextarea";
 
 const STATUS_GROUPS: { key: BookStatus; label: string }[] = [
   { key: "reading", label: "読んでいる" },
@@ -188,10 +189,10 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
 
       <div className="flex flex-col gap-1.5 mb-4">
         <label className="text-xs font-bold text-ink-soft">まとめ（印象に残った点を短く書く）</label>
-        <textarea
+        <BulletTextarea
           rows={5}
           value={summary}
-          onChange={(e) => setSummary(e.target.value)}
+          onChange={setSummary}
           placeholder="・心に残ったポイントを3〜5個、短く書きましょう"
         />
       </div>

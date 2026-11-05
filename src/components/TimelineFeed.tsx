@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import Link from "next/link";
 
 export type TimelineCard = {
@@ -10,10 +10,32 @@ export type TimelineCard = {
 };
 
 const SLIDE_SPEED = 0.05; // px / ms
+const ROWS = 2;
 
-export default function TimelineFeed({ cards }: { cards: TimelineCard[] }) {
+type RowHandle = { step: (dir: 1 | -1) => void };
+
+const FeedRow = forwardRef<RowHandle, { cards: TimelineCard[] }>(function FeedRow({ cards }, ref) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      step(dir: 1 | -1) {
+        const vp = viewportRef.current;
+        if (!vp) return;
+        if (rafRef.current != null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+        vp.classList.remove("auto-sliding");
+        const card = vp.querySelector<HTMLElement>("[data-feed-card]");
+        const width = card ? card.getBoundingClientRect().width + 14 : 300;
+        vp.scrollBy({ left: dir * width, behavior: "smooth" });
+      },
+    }),
+    []
+  );
 
   useEffect(() => {
     const vp = viewportRef.current;
@@ -59,32 +81,56 @@ export default function TimelineFeed({ cards }: { cards: TimelineCard[] }) {
     };
   }, [cards]);
 
-  function step(dir: 1 | -1) {
-    const vp = viewportRef.current;
-    if (!vp) return;
-    if (rafRef.current != null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-    vp.classList.remove("auto-sliding");
-    const card = vp.querySelector<HTMLElement>("[data-feed-card]");
-    const width = card ? card.getBoundingClientRect().width + 14 : 300;
-    vp.scrollBy({ left: dir * width, behavior: "smooth" });
-  }
+  return (
+    <div
+      ref={viewportRef}
+      className="feed-viewport overflow-x-auto overflow-y-hidden pb-1.5 -mx-1"
+      style={{ scrollSnapType: "x mandatory" }}
+    >
+      <div className="flex gap-3.5 px-1">
+        {cards.map((c, i) => (
+          <Link
+            key={`${c.recordId}-${i}`}
+            data-feed-card
+            href={`/detail/${c.recordId}`}
+            className="rounded border border-line border-l-[3px] bg-surface px-4 py-3.5 transition-colors hover:border-accent"
+            style={{
+              flex: "0 0 min(300px, 80vw)",
+              scrollSnapAlign: "start",
+              borderLeftColor: "var(--color-accent)",
+            }}
+          >
+            {c.bookTitle && (
+              <p className="text-[11px] font-bold tracking-wide uppercase text-accent mb-1.5">{c.bookTitle}</p>
+            )}
+            <p className="text-sm text-ink line-clamp-3 whitespace-pre-line">{c.bullet}</p>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+export default function TimelineFeed({ cards }: { cards: TimelineCard[] }) {
+  const rowRefs = useRef<(RowHandle | null)[]>([]);
 
   if (cards.length === 0) {
     return (
       <div className="rounded border border-dashed border-line px-5 py-16 text-center flex flex-col items-center gap-2.5">
         <p className="font-black text-lg">まだ記録がありません</p>
         <p className="text-sm text-ink-soft mb-2">最初の一冊を記録して、タイムラインを灯しましょう。</p>
-        <Link
-          href="/new"
-          className="rounded bg-accent text-on-accent font-bold text-sm px-4.5 py-2.5"
-        >
+        <Link href="/new" className="rounded bg-accent text-on-accent font-bold text-sm px-4.5 py-2.5">
           最初の記録を書く
         </Link>
       </div>
     );
+  }
+
+  const rows: TimelineCard[][] = Array.from({ length: ROWS }, () => []);
+  cards.forEach((c, i) => rows[i % ROWS].push(c));
+
+  function step(dir: 1 | -1) {
+    for (const row of rowRefs.current) row?.step(dir);
   }
 
   return (
@@ -107,33 +153,16 @@ export default function TimelineFeed({ cards }: { cards: TimelineCard[] }) {
           →
         </button>
       </div>
-      <div
-        ref={viewportRef}
-        className="feed-viewport overflow-x-auto overflow-y-hidden pb-1.5 -mx-1"
-        style={{ scrollSnapType: "x mandatory" }}
-      >
-        <div className="flex gap-3.5 px-1">
-          {cards.map((c, i) => (
-            <Link
-              key={`${c.recordId}-${i}`}
-              data-feed-card
-              href={`/detail/${c.recordId}`}
-              className="rounded border border-line border-l-[3px] bg-surface px-4 py-3.5 transition-colors hover:border-accent"
-              style={{
-                flex: "0 0 min(300px, 80vw)",
-                scrollSnapAlign: "start",
-                borderLeftColor: "var(--color-accent)",
-              }}
-            >
-              {c.bookTitle && (
-                <p className="text-[11px] font-bold tracking-wide uppercase text-accent mb-1.5">
-                  {c.bookTitle}
-                </p>
-              )}
-              <p className="text-sm text-ink line-clamp-3 whitespace-pre-line">{c.bullet}</p>
-            </Link>
-          ))}
-        </div>
+      <div className="flex flex-col gap-3.5">
+        {rows.map((rowCards, i) => (
+          <FeedRow
+            key={i}
+            cards={rowCards}
+            ref={(el) => {
+              rowRefs.current[i] = el;
+            }}
+          />
+        ))}
       </div>
       <style jsx global>{`
         .feed-viewport.auto-sliding {
