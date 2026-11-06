@@ -1,12 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import CalendarView from "@/components/CalendarView";
 import type { BookStatus } from "@/lib/types";
 
 export default async function CalendarPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const [{ data: records }, { data: books }] = await Promise.all([
     supabase

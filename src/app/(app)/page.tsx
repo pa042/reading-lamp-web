@@ -1,12 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { extractBullets } from "@/lib/utils";
 import TimelineFeed, { type TimelineCard } from "@/components/TimelineFeed";
 
 export default async function HomePage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const { data: records } = await supabase
     .from("records")

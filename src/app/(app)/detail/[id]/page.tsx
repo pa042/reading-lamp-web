@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { formatDateJa, formatPageRange } from "@/lib/utils";
 import StatusChip from "@/components/StatusChip";
 import DeleteRecordButton from "@/components/DeleteRecordButton";
@@ -8,9 +8,7 @@ import DeleteRecordButton from "@/components/DeleteRecordButton";
 export default async function RecordDetailPage({ params }: PageProps<"/detail/[id]">) {
   const { id } = await params;
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const { data: record } = await supabase
     .from("records")

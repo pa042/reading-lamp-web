@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { coverUrl } from "@/lib/utils";
 import BookDetailView from "@/components/BookDetailView";
 import RecordCard from "@/components/RecordCard";
@@ -8,9 +8,7 @@ import RecordCard from "@/components/RecordCard";
 export default async function BookPage({ params }: PageProps<"/book/[id]">) {
   const { id } = await params;
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const { data: book } = await supabase
     .from("books")

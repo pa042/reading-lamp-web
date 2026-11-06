@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -25,3 +26,13 @@ export async function createClient() {
     }
   );
 }
+
+// auth.getUser() はSupabaseへのネットワーク通信を伴うため、同一リクエスト内では
+// React cache() で結果を使い回し、layout + page の重複呼び出しをなくす。
+export const getUser = cache(async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+});

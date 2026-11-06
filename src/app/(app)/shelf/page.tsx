@@ -1,12 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import { coverUrl } from "@/lib/utils";
 import ShelfView from "@/components/ShelfView";
 
 export default async function ShelfPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const [{ data: books }, { data: records }] = await Promise.all([
     supabase.from("books").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),

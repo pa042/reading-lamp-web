@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getUser } from "@/lib/supabase/server";
 import RecordForm from "@/components/RecordForm";
 
 export default async function NewRecordPage({ searchParams }: PageProps<"/new">) {
@@ -6,9 +6,7 @@ export default async function NewRecordPage({ searchParams }: PageProps<"/new">)
   const presetBookId = typeof params.book === "string" ? params.book : undefined;
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getUser();
 
   const { data: books } = await supabase
     .from("books")

@@ -1,32 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+const LOGIN_EMAIL = process.env.NEXT_PUBLIC_LOGIN_EMAIL!;
+
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const router = useRouter();
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const trimmed = email.trim();
-    if (!trimmed) return;
+    if (!password) return;
     setStatus("sending");
     setErrorMsg("");
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email: trimmed,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
+    const { error } = await supabase.auth.signInWithPassword({
+      email: LOGIN_EMAIL,
+      password,
     });
     if (error) {
       setStatus("error");
-      setErrorMsg(error.message);
+      setErrorMsg(
+        error.message === "Invalid login credentials"
+          ? "パスワードが違います。"
+          : error.message
+      );
       return;
     }
-    setStatus("sent");
+    router.push("/");
+    router.refresh();
   }
 
   return (
@@ -36,45 +42,32 @@ export default function LoginPage() {
           リーディングランプ
         </p>
         <h1 className="text-2xl font-black mb-3">読書ノートにログイン</h1>
-        <p className="text-sm text-ink-soft mb-8">
-          メールアドレスを入力すると、ログイン用のリンクが届きます。パスワードは不要です。
-        </p>
+        <p className="text-sm text-ink-soft mb-8">パスワードを入力してください。</p>
 
-        {status === "sent" ? (
-          <div className="rounded border border-line bg-surface p-4 text-sm">
-            <p className="font-bold mb-1">メールを送信しました</p>
-            <p className="text-ink-soft">
-              {email} 宛にログインリンクを送りました。メール内のリンクを開いてログインしてください。
-            </p>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1.5">
+            <label htmlFor="password" className="text-xs font-bold text-ink-soft">
+              パスワード
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              autoFocus
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="rounded border border-line bg-surface px-3 py-2.5"
+            />
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor="email" className="text-xs font-bold text-ink-soft">
-                メールアドレス
-              </label>
-              <input
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="rounded border border-line bg-surface px-3 py-2.5"
-              />
-            </div>
-            {status === "error" && (
-              <p className="text-sm text-danger">{errorMsg || "送信に失敗しました。もう一度お試しください。"}</p>
-            )}
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="rounded bg-accent text-on-accent font-bold py-2.5 disabled:opacity-50"
-            >
-              {status === "sending" ? "送信中…" : "ログインリンクを送る"}
-            </button>
-          </form>
-        )}
+          {status === "error" && <p className="text-sm text-danger">{errorMsg}</p>}
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            className="rounded bg-accent text-on-accent font-bold py-2.5 disabled:opacity-50"
+          >
+            {status === "sending" ? "ログイン中…" : "ログイン"}
+          </button>
+        </form>
       </div>
     </div>
   );

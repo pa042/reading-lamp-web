@@ -14,14 +14,14 @@ export default function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 flex justify-around border-t border-line bg-surface px-2 py-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 flex border-t border-line bg-surface">
       {NAV_LINKS.map((link) => {
         const active = link.match(pathname);
         return (
           <Link
             key={link.href}
             href={link.href}
-            className={`flex flex-col items-center gap-1 rounded px-3 py-1.5 text-[11px] ${
+            className={`flex flex-1 flex-col items-center justify-center gap-1 py-2.5 min-h-[56px] text-[11px] active:bg-page ${
               active ? "text-accent font-bold" : "text-ink-soft"
             }`}
           >
