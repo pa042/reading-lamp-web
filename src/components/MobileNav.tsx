@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CalendarIcon, HomeIcon, NewRecordIcon, ShelfIcon } from "./NavIcons";
 
 const NAV_LINKS = [
-  { href: "/", label: "ホーム", match: (p: string) => p === "/" },
-  { href: "/new", label: "記録する", match: (p: string) => p.startsWith("/new") },
-  { href: "/calendar", label: "カレンダー", match: (p: string) => p.startsWith("/calendar") },
-  { href: "/shelf", label: "本棚", match: (p: string) => p.startsWith("/shelf") || p.startsWith("/book") },
+  { href: "/", label: "ホーム", icon: HomeIcon, match: (p: string) => p === "/" },
+  { href: "/new", label: "記録する", icon: NewRecordIcon, match: (p: string) => p.startsWith("/new") },
+  { href: "/calendar", label: "カレンダー", icon: CalendarIcon, match: (p: string) => p.startsWith("/calendar") },
+  {
+    href: "/shelf",
+    label: "本棚",
+    icon: ShelfIcon,
+    match: (p: string) => p.startsWith("/shelf") || p.startsWith("/book"),
+  },
 ];
 
 export default function MobileNav() {
@@ -17,6 +23,7 @@ export default function MobileNav() {
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-20 flex border-t border-line bg-surface">
       {NAV_LINKS.map((link) => {
         const active = link.match(pathname);
+        const Icon = link.icon;
         return (
           <Link
             key={link.href}
@@ -25,6 +32,7 @@ export default function MobileNav() {
               active ? "text-accent font-bold" : "text-ink-soft"
             }`}
           >
+            <Icon />
             {link.label}
           </Link>
         );

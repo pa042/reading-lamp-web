@@ -70,10 +70,6 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
       setError("本を選んでください");
       return;
     }
-    if (!note.trim()) {
-      setError("メモを書いてください");
-      return;
-    }
     setSaving(true);
     setError("");
     try {
@@ -178,7 +174,7 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
       </div>
 
       <div className="flex flex-col gap-1.5 mb-4">
-        <label className="text-xs font-bold text-ink-soft">書いたメモ</label>
+        <label className="text-xs font-bold text-ink-soft">書いたメモ（任意）</label>
         <textarea
           rows={8}
           value={note}
