@@ -10,21 +10,17 @@ export default async function BookPage({ params }: PageProps<"/book/[id]">) {
   const supabase = await createClient();
   const user = await getUser();
 
-  const { data: book } = await supabase
-    .from("books")
-    .select("*")
-    .eq("id", id)
-    .eq("user_id", user!.id)
-    .single();
+  const [{ data: book }, { data: records }] = await Promise.all([
+    supabase.from("books").select("*").eq("id", id).eq("user_id", user!.id).single(),
+    supabase
+      .from("records")
+      .select("id, book_title, date, page_from, page_to, summary, raw_text")
+      .eq("book_id", id)
+      .eq("user_id", user!.id)
+      .order("created_at", { ascending: false }),
+  ]);
 
   if (!book) notFound();
-
-  const { data: records } = await supabase
-    .from("records")
-    .select("id, book_title, date, page_from, page_to, summary, raw_text")
-    .eq("book_id", id)
-    .eq("user_id", user!.id)
-    .order("created_at", { ascending: false });
 
   return (
     <section>
