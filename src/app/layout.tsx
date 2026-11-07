@@ -1,9 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "リーディングランプ",
   description: "読んだ本の記録をつける、個人用の読書ノート",
+  appleWebApp: {
+    capable: true,
+    title: "読書ノート",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#1f6f63",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
