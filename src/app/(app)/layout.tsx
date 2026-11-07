@@ -13,7 +13,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const { data: records } = await supabase
     .from("records")
     .select("date")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .order("date", { ascending: false })
+    .limit(400);
 
   const dateSet = new Set((records ?? []).map((r) => r.date as string));
   const streak = computeStreak(dateSet);

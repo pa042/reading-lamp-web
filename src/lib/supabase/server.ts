@@ -27,12 +27,12 @@ export async function createClient() {
   );
 }
 
-// auth.getUser() はSupabaseへのネットワーク通信を伴うため、同一リクエスト内では
-// React cache() で結果を使い回し、layout + page の重複呼び出しをなくす。
+// getClaims() はJWTの署名検証のみで済み、getUser() のように毎回Supabaseサーバーへ
+// 問い合わせる必要がない（プロジェクトの鍵設定次第ではネットワーク通信すら発生しない）。
+// 同一リクエスト内では React cache() で結果を使い回し、layout + page の重複呼び出しもなくす。
 export const getUser = cache(async () => {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user;
+  const { data } = await supabase.auth.getClaims();
+  if (!data) return null;
+  return { id: data.claims.sub, email: data.claims.email ?? null };
 });
