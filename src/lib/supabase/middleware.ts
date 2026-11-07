@@ -2,8 +2,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const PUBLIC_PATHS = ["/login", "/auth/confirm"];
+// ログイン状態に関係なく常に返してよいメタデータ系ルート（認証チェック自体が不要）
+const METADATA_PATHS = ["/manifest.webmanifest", "/apple-icon", "/icon"];
 
 export async function updateSession(request: NextRequest) {
+  if (METADATA_PATHS.some((p) => request.nextUrl.pathname.startsWith(p))) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
