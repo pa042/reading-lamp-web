@@ -85,7 +85,6 @@ const FeedRow = forwardRef<RowHandle, { cards: TimelineCard[] }>(function FeedRo
     <div
       ref={viewportRef}
       className="feed-viewport overflow-x-auto overflow-y-hidden pb-1.5 -mx-1"
-      style={{ scrollSnapType: "x mandatory" }}
     >
       <div className="flex gap-3.5 px-1">
         {cards.map((c, i) => (
@@ -165,6 +164,9 @@ export default function TimelineFeed({ cards }: { cards: TimelineCard[] }) {
         ))}
       </div>
       <style jsx global>{`
+        .feed-viewport {
+          scroll-snap-type: x mandatory;
+        }
         .feed-viewport.auto-sliding {
           scroll-snap-type: none;
         }

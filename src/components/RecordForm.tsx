@@ -23,11 +23,8 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
   const [addingBook, setAddingBook] = useState(false);
 
   const [date, setDate] = useState(() => fmtDate(new Date()));
-  const [pageFrom, setPageFrom] = useState("");
-  const [pageTo, setPageTo] = useState("");
   const [note, setNote] = useState("");
   const [summary, setSummary] = useState("");
-  const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -78,11 +75,11 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
         bookId,
         bookTitle: book?.title ?? "",
         date,
-        pageFrom: pageFrom.trim() ? Math.max(0, parseInt(pageFrom, 10)) : null,
-        pageTo: pageTo.trim() ? Math.max(0, parseInt(pageTo, 10)) : null,
+        pageFrom: null,
+        pageTo: null,
         rawText: note.trim(),
         summary: summary.trim(),
-        markFinished: finished,
+        markFinished: false,
       });
       router.push(`/detail/${record.id}`);
       router.refresh();
@@ -148,31 +145,6 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
       </div>
 
-      <div className="flex flex-wrap gap-2.5 mb-4">
-        <div className="flex flex-col gap-1.5 flex-1 min-w-[130px]">
-          <label className="text-xs font-bold text-ink-soft">〜ページから</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={pageFrom}
-            onChange={(e) => setPageFrom(e.target.value)}
-            placeholder="120"
-          />
-        </div>
-        <div className="flex flex-col gap-1.5 flex-1 min-w-[130px]">
-          <label className="text-xs font-bold text-ink-soft">〜ページまで</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            pattern="[0-9]*"
-            value={pageTo}
-            onChange={(e) => setPageTo(e.target.value)}
-            placeholder="145"
-          />
-        </div>
-      </div>
-
       <div className="flex flex-col gap-1.5 mb-4">
         <label className="text-xs font-bold text-ink-soft">書いたメモ（任意）</label>
         <textarea
@@ -192,16 +164,6 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
           placeholder="・心に残ったポイントを3〜5個、短く書きましょう"
         />
       </div>
-
-      <label className="flex items-center gap-2 text-sm text-ink-soft mb-4.5">
-        <input
-          type="checkbox"
-          checked={finished}
-          onChange={(e) => setFinished(e.target.checked)}
-          className="w-auto"
-        />
-        この本を読み終えた
-      </label>
 
       {error && <p className="text-sm text-danger mb-3">{error}</p>}
 

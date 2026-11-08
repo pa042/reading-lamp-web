@@ -9,7 +9,7 @@ export default function CoverBox({
   title: string;
   size?: "sm" | "md" | "lg";
 }) {
-  const dims = { sm: 56, md: 128, lg: 160 }[size];
+  const dims = { sm: 56, md: 84, lg: 160 }[size];
   const initial = title.trim() ? Array.from(title.trim())[0] : "";
 
   return (
