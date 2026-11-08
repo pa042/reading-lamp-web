@@ -1,6 +1,7 @@
 import { createClient, getUser } from "@/lib/supabase/server";
 import { extractBullets } from "@/lib/utils";
 import TimelineFeed, { type TimelineCard } from "@/components/TimelineFeed";
+import { HomeIcon } from "@/components/NavIcons";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -22,7 +23,10 @@ export default async function HomePage() {
   return (
     <section>
       <header className="mb-7">
-        <p className="text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">ホーム</p>
+        <p className="flex items-center gap-1.5 text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">
+          <HomeIcon className="w-3.5 h-3.5" />
+          ホーム
+        </p>
         <h1 className="text-2xl font-black mb-2">読んだ記録をスライドで振り返る</h1>
         <p className="text-sm text-ink-soft">カードが自動でスライドします。手でも操作できます。</p>
       </header>

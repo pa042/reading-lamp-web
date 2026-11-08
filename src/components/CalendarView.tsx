@@ -9,6 +9,7 @@ import {
   longestStreak,
 } from "@/lib/utils";
 import RecordCard from "./RecordCard";
+import { CalendarIcon } from "./NavIcons";
 
 type RecordRow = Pick<
   ReadingRecord,
@@ -57,7 +58,10 @@ export default function CalendarView({
   return (
     <section>
       <header className="mb-7">
-        <p className="text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">カレンダー</p>
+        <p className="flex items-center gap-1.5 text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">
+          <CalendarIcon className="w-3.5 h-3.5" />
+          カレンダー
+        </p>
         <h1 className="text-2xl font-black mb-2">記録した日をふりかえる</h1>
         <p className="text-sm text-ink-soft">日付を押すと、その日の記録を読み返せます。</p>
       </header>

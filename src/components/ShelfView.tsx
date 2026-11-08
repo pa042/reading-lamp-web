@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Book, BookStatus } from "@/lib/types";
 import AddBookForm from "./AddBookForm";
 import BookCardTile from "./BookCardTile";
+import { ShelfIcon } from "./NavIcons";
 
 const SECTIONS: { key: BookStatus; title: string }[] = [
   { key: "reading", title: "読んでいる本" },
@@ -30,7 +31,10 @@ export default function ShelfView({
   return (
     <section>
       <header className="mb-7">
-        <p className="text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">本棚</p>
+        <p className="flex items-center gap-1.5 text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">
+          <ShelfIcon className="w-3.5 h-3.5" />
+          本棚
+        </p>
         <h1 className="text-2xl font-black mb-2">積み上げてきた本たち</h1>
         <p className="text-sm text-ink-soft">本を押すと、その本に書いた記録を読み返せます。</p>
       </header>

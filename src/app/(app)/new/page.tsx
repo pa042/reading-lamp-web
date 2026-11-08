@@ -1,5 +1,6 @@
 import { createClient, getUser } from "@/lib/supabase/server";
 import RecordForm from "@/components/RecordForm";
+import { NewRecordIcon } from "@/components/NavIcons";
 
 export default async function NewRecordPage({ searchParams }: PageProps<"/new">) {
   const params = await searchParams;
@@ -17,7 +18,10 @@ export default async function NewRecordPage({ searchParams }: PageProps<"/new">)
   return (
     <section>
       <header className="mb-7">
-        <p className="text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">記録する</p>
+        <p className="flex items-center gap-1.5 text-xs tracking-[0.16em] uppercase text-accent font-bold mb-2">
+          <NewRecordIcon className="w-3.5 h-3.5" />
+          記録する
+        </p>
         <h1 className="text-2xl font-black mb-2">印象に残ったことを書く</h1>
         <p className="text-sm text-ink-soft">心に残ったフレーズや考えたことを、そのまま書いてみましょう。</p>
       </header>
