@@ -16,38 +16,58 @@ export default function AppleIcon() {
           background: "#1f6f63",
         }}
       >
-        <div style={{ display: "flex", position: "relative", width: 110, height: 110 }}>
+        <div
+          style={{
+            display: "flex",
+            position: "relative",
+            width: 61,
+            height: 104,
+            borderRadius: 7,
+            overflow: "hidden",
+            background: "#f6f7f4",
+          }}
+        >
           <div
             style={{
               position: "absolute",
               top: 0,
-              left: 44,
-              width: 18,
-              height: 18,
-              borderRadius: "50%",
-              background: "#ffe9b3",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: 60,
               left: 0,
-              width: 50,
-              height: 50,
-              background: "#f6f7f4",
-              clipPath: "polygon(0% 100%, 100% 70%, 100% 0%, 0% 30%)",
+              width: 20,
+              height: 104,
+              background: "#d1a14a",
             }}
           />
           <div
             style={{
               position: "absolute",
-              top: 60,
-              right: 0,
-              width: 50,
-              height: 50,
-              background: "#eef0ea",
-              clipPath: "polygon(100% 100%, 0% 70%, 0% 0%, 100% 30%)",
+              top: 0,
+              left: 45,
+              width: 1.3,
+              height: 104,
+              background: "#1f6f63",
+              opacity: 0.55,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 48,
+              width: 1.3,
+              height: 104,
+              background: "#1f6f63",
+              opacity: 0.55,
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 51,
+              width: 1.3,
+              height: 104,
+              background: "#1f6f63",
+              opacity: 0.55,
             }}
           />
         </div>
