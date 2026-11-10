@@ -23,7 +23,6 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
   const [addingBook, setAddingBook] = useState(false);
 
   const [date, setDate] = useState(() => fmtDate(new Date()));
-  const [note, setNote] = useState("");
   const [summary, setSummary] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -77,7 +76,7 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
         date,
         pageFrom: null,
         pageTo: null,
-        rawText: note.trim(),
+        rawText: "",
         summary: summary.trim(),
         markFinished: false,
       });
@@ -143,16 +142,6 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
       <div className="flex flex-col gap-1.5 mb-4">
         <label className="text-xs font-bold text-ink-soft">日付</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      </div>
-
-      <div className="flex flex-col gap-1.5 mb-4">
-        <label className="text-xs font-bold text-ink-soft">書いたメモ（任意）</label>
-        <textarea
-          rows={8}
-          value={note}
-          onChange={(e) => setNote(e.target.value)}
-          placeholder="心に残ったフレーズや、考えたこと、学びをそのまま書いてみましょう。"
-        />
       </div>
 
       <div className="flex flex-col gap-1.5 mb-4">

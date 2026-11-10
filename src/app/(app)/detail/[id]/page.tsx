@@ -50,10 +50,12 @@ export default async function RecordDetailPage({ params }: PageProps<"/detail/[i
         <p className="text-[0.94rem] whitespace-pre-line">{record.summary}</p>
       </div>
 
-      <div className="rounded border border-line bg-surface px-5 py-4.5 mb-4">
-        <h2 className="text-sm font-bold text-ink-soft mb-2.5">書いたメモ</h2>
-        <p className="text-[0.94rem] whitespace-pre-line">{record.raw_text}</p>
-      </div>
+      {record.raw_text && (
+        <div className="rounded border border-line bg-surface px-5 py-4.5 mb-4">
+          <h2 className="text-sm font-bold text-ink-soft mb-2.5">書いたメモ</h2>
+          <p className="text-[0.94rem] whitespace-pre-line">{record.raw_text}</p>
+        </div>
+      )}
 
       <div className="flex justify-between items-center flex-wrap gap-2.5">
         {book ? (
