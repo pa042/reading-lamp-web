@@ -25,16 +25,6 @@ export function formatPageRange(r: Pick<ReadingRecord, "page_from" | "page_to">)
   return "";
 }
 
-export function extractBullets(r: Pick<ReadingRecord, "summary" | "raw_text">): string[] {
-  const text = (r.summary || r.raw_text || "").trim();
-  if (!text) return [];
-  const lines = text
-    .split("\n")
-    .map((l) => l.replace(/^[・\-\s]+/, "").trim())
-    .filter(Boolean);
-  return lines.length ? lines : [text];
-}
-
 export function computeStreak(dateSet: Set<string>): number {
   let streak = 0;
   const cursor = new Date();
