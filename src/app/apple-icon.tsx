@@ -13,7 +13,7 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#1f6f63",
+          background: "#2f8049",
         }}
       >
         <div
@@ -44,7 +44,7 @@ export default function AppleIcon() {
               left: 45,
               width: 1.3,
               height: 104,
-              background: "#1f6f63",
+              background: "#2f8049",
               opacity: 0.55,
             }}
           />
@@ -55,7 +55,7 @@ export default function AppleIcon() {
               left: 48,
               width: 1.3,
               height: 104,
-              background: "#1f6f63",
+              background: "#2f8049",
               opacity: 0.55,
             }}
           />
@@ -66,7 +66,7 @@ export default function AppleIcon() {
               left: 51,
               width: 1.3,
               height: 104,
-              background: "#1f6f63",
+              background: "#2f8049",
               opacity: 0.55,
             }}
           />
