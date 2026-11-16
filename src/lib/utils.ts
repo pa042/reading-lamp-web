@@ -91,6 +91,13 @@ export function buildMonthGrid(year: number, month: number, dateSet: Set<string>
   return cells;
 }
 
+export function splitBulletLines(text: string): string[] {
+  return text
+    .split("\n")
+    .map((line) => line.replace(/^・\s*/, "").trim())
+    .filter((line) => line.length > 0);
+}
+
 export function coverUrl(supabaseUrl: string, coverPath: string | null): string | null {
   if (!coverPath) return null;
   return `${supabaseUrl}/storage/v1/object/public/covers/${coverPath}`;

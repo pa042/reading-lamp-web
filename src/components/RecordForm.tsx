@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Book, BookStatus } from "@/lib/types";
-import { createBook, createRecord } from "@/app/actions";
-import { fmtDate } from "@/lib/utils";
+import { createBook, createRecords } from "@/app/actions";
+import { fmtDate, splitBulletLines } from "@/lib/utils";
 import BulletTextarea from "./BulletTextarea";
 
 const STATUS_GROUPS: { key: BookStatus; label: string }[] = [
@@ -66,21 +66,23 @@ export default function RecordForm({ books, presetBookId }: { books: Book[]; pre
       setError("本を選んでください");
       return;
     }
+    const summaries = splitBulletLines(summary);
+    if (summaries.length === 0) {
+      setError("内容を入力してください");
+      return;
+    }
     setSaving(true);
     setError("");
     try {
       const book = bookList.find((b) => b.id === bookId);
-      const record = await createRecord({
+      await createRecords({
         bookId,
         bookTitle: book?.title ?? "",
         date,
-        pageFrom: null,
-        pageTo: null,
-        rawText: "",
-        summary: summary.trim(),
+        summaries,
         markFinished: false,
       });
-      router.push(`/detail/${record.id}`);
+      router.push("/");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "記録の保存に失敗しました");

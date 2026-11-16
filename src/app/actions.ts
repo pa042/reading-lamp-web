@@ -104,32 +104,30 @@ export async function updateBookInfo(
   revalidatePath("/shelf");
 }
 
-export async function createRecord(input: {
+export async function createRecords(input: {
   bookId: string;
   bookTitle: string;
   date: string;
-  pageFrom: number | null;
-  pageTo: number | null;
-  rawText: string;
-  summary: string;
+  summaries: string[];
   markFinished: boolean;
-}): Promise<{ id: string }> {
+}): Promise<{ ids: string[] }> {
   const { supabase, user } = await requireUser();
 
   const { data, error } = await supabase
     .from("records")
-    .insert({
-      user_id: user.id,
-      book_id: input.bookId,
-      book_title: input.bookTitle,
-      date: input.date,
-      page_from: input.pageFrom,
-      page_to: input.pageTo,
-      raw_text: input.rawText,
-      summary: input.summary || input.rawText,
-    })
-    .select("id")
-    .single();
+    .insert(
+      input.summaries.map((summary) => ({
+        user_id: user.id,
+        book_id: input.bookId,
+        book_title: input.bookTitle,
+        date: input.date,
+        page_from: null,
+        page_to: null,
+        raw_text: "",
+        summary,
+      }))
+    )
+    .select("id");
 
   if (error) throw new Error(`記録の保存に失敗しました: ${error.message}`);
 
@@ -156,7 +154,7 @@ export async function createRecord(input: {
   revalidatePath("/");
   revalidatePath("/calendar");
   revalidatePath(`/book/${input.bookId}`);
-  return { id: data.id as string };
+  return { ids: (data ?? []).map((r) => r.id as string) };
 }
 
 export async function deleteRecord(recordId: string): Promise<void> {
