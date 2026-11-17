@@ -100,8 +100,17 @@ export async function updateBookInfo(
     .eq("user_id", user.id);
   if (error) throw new Error(`本の情報の更新に失敗しました: ${error.message}`);
 
+  const { error: recordsError } = await supabase
+    .from("records")
+    .update({ book_title: input.title.trim() })
+    .eq("book_id", bookId)
+    .eq("user_id", user.id);
+  if (recordsError) throw new Error(`記録のタイトル更新に失敗しました: ${recordsError.message}`);
+
   revalidatePath(`/book/${bookId}`);
   revalidatePath("/shelf");
+  revalidatePath("/");
+  revalidatePath("/calendar");
 }
 
 export async function createRecords(input: {
